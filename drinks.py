@@ -1,16 +1,16 @@
 # drinks.py
 drink_list = [
 	{
-		"name": "Rum & Coke",
+		"name": "Strawberry Milk Tea",
 		"ingredients": {
-			"rum": 50,
-			"coke": 150
+			"Strawberry": 50,
+			"Milk_Tea": 150
 		}
 	}, {
-		"name": "Gin & Tonic",
+		"name": "Jasmine Milk Tea",
 		"ingredients": {
-			"gin": 50,
-			"tonic": 150
+			"Jasmine": 50,
+			"Milk_Tea": 150
 		}
 	}, {
 		"name": "Long Island",
