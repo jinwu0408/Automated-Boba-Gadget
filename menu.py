@@ -17,20 +17,25 @@ class Menu(MenuItem):
 		self.selectedOption = 0
 		self.parent = None
 
+	#add list of options(list)
 	def addOptions(self, options):
 		self.options = self.options + options
 		self.selectedOption = 0
 
+	#add one single options(str)
 	def addOption(self, option):
 		self.options.append(option)
 		self.selectedOption = 0
 
+
 	def setParent(self, parent):
 		self.parent = parent
 
+	#select next options
 	def nextSelection(self):
 		self.selectedOption = (self.selectedOption + 1) % len(self.options)
 
+	#return the current option
 	def getSelection(self):
 		return self.options[self.selectedOption]
 
@@ -43,7 +48,7 @@ class MenuContext(object):
 
 	def showMenu(self):
 		"""
-		Shows the first selection of the current menu 
+		Shows the first selection of the current menu
 		"""
 		self.display(self.currentMenu.getSelection());
 
@@ -61,7 +66,7 @@ class MenuContext(object):
 
 	def display(self, menuItem):
 		"""
-		Tells the delegate to display the selection. Advances to the next selection if the 
+		Tells the delegate to display the selection. Advances to the next selection if the
 		menuItem is visible==False
 		"""
 		self.delegate.prepareForRender(self.topLevelMenu)
@@ -79,7 +84,7 @@ class MenuContext(object):
 		for i in self.currentMenu.options:
 			self.currentMenu.nextSelection()
 			selection = self.currentMenu.getSelection()
-			if (selection.visible): 
+			if (selection.visible):
 				self.display(selection)
 				return
 		raise ValueError("At least one option in a menu must be visible!")
@@ -110,20 +115,23 @@ class MenuContext(object):
 			self.display(self.currentMenu.getSelection())
 
 class MenuDelegate(object):
-	def prepareForRender(self, menu): 
+	def prepareForRender(self, menu):
 		"""
-		Called before the menu needs to display. Useful for changing visibility. 
+		Called before the menu needs to display. Useful for changing visibility.
 		"""
-		raise NotImplementedError
+		#raise NotImplementedError
+		pass
 
 	def menuItemClicked(self, menuItem):
 		"""
 		Called when a menu item is selected. Useful for taking action on a menu item click.
 		"""
-		raise NotImplementedError
+		pass
+		#raise NotImplementedError
 
 	def displayMenuItem(self, menuItem):
 		"""
 		Called when the menu item should be displayed.
 		"""
-		raise NotImplementedError
+		print(menuItem.name)
+		#raise NotImplementedError
