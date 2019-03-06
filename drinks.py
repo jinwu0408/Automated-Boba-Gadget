@@ -12,7 +12,10 @@ drink_list = [
 			"Jasmine": 50,
 			"Milk_Tea": 150
 		}
-	}, {
+	}
+]
+"""
+		{
 		"name": "Long Island",
 		"ingredients": {
 			"gin": 15,
@@ -48,7 +51,7 @@ drink_list = [
 		}
 	}
 ]
-
+"""
 drink_options = [
 	{"name": "Gin", "value": "gin"},
 	{"name": "Rum", "value": "rum"},

@@ -8,7 +8,7 @@ import json
 import threading
 import traceback
 
-from dotstar import Adafruit_DotStar
+#from dotstar import Adafruit_DotStar
 from menu import MenuItem, Menu, Back, MenuContext, MenuDelegate
 from drinks import drink_list, drink_options
 
@@ -33,7 +33,7 @@ NEOPIXEL_BRIGHTNESS = 64
 
 FLOW_RATE = 60.0/100.0
 
-class Bartender(MenuDelegate): 
+class Bartender(MenuDelegate):
 	def __init__(self):
 		self.running = False
 
@@ -43,10 +43,10 @@ class Bartender(MenuDelegate):
 
 		self.btn1Pin = LEFT_BTN_PIN
 		self.btn2Pin = RIGHT_BTN_PIN
-	 
+
 	 	# configure interrups for buttons
-	 	GPIO.setup(self.btn1Pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-		GPIO.setup(self.btn2Pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)  
+		GPIO.setup(self.btn1Pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+		GPIO.setup(self.btn2Pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 		# configure screen
 		spi_bus = 0
@@ -70,8 +70,9 @@ class Bartender(MenuDelegate):
 			GPIO.setup(self.pump_configuration[pump]["pin"], GPIO.OUT, initial=GPIO.HIGH)
 
 		# setup pixels:
-		self.numpixels = NUMBER_NEOPIXELS # Number of LEDs in strip
+		#self.numpixels = NUMBER_NEOPIXELS # Number of LEDs in strip
 
+		""""
 		# Here's how to control the strip from any two GPIO pins:
 		datapin  = NEOPIXEL_DATA_PIN
 		clockpin = NEOPIXEL_CLOCK_PIN
@@ -82,9 +83,10 @@ class Bartender(MenuDelegate):
 		# turn everything off
 		for i in range(0, self.numpixels):
 			self.strip.setPixelColor(i, 0)
-		self.strip.show() 
+		self.strip.show()
+		"""
 
-		print "Done initializing"
+		print ("Done initializing")
 
 	@staticmethod
 	def readPumpConfiguration():
@@ -96,8 +98,8 @@ class Bartender(MenuDelegate):
 			json.dump(configuration, jsonFile)
 
 	def startInterrupts(self):
-		GPIO.add_event_detect(self.btn1Pin, GPIO.FALLING, callback=self.left_btn, bouncetime=LEFT_PIN_BOUNCE)  
-		GPIO.add_event_detect(self.btn2Pin, GPIO.FALLING, callback=self.right_btn, bouncetime=RIGHT_PIN_BOUNCE)  
+		GPIO.add_event_detect(self.btn1Pin, GPIO.FALLING, callback=self.left_btn, bouncetime=LEFT_PIN_BOUNCE)
+		GPIO.add_event_detect(self.btn2Pin, GPIO.FALLING, callback=self.right_btn, bouncetime=RIGHT_PIN_BOUNCE)
 
 	def stopInterrupts(self):
 		GPIO.remove_event_detect(self.btn1Pin)
@@ -141,9 +143,12 @@ class Bartender(MenuDelegate):
 		# create a menu context
 		self.menuContext = MenuContext(m, self)
 
+# MENU -> [milk tea menu, special tea menu, soda]
+
 	def filterDrinks(self, menu):
 		"""
 		Removes any drinks that can't be handled by the pump configuration
+		Jin: basically filter out the drinks that cant be made by current ingredients
 		"""
 		for i in menu.options:
 			if (i.type == "drink"):
@@ -154,7 +159,7 @@ class Bartender(MenuDelegate):
 					for p in self.pump_configuration.keys():
 						if (ing == self.pump_configuration[p]["value"]):
 							presentIng += 1
-				if (presentIng == len(ingredients.keys())): 
+				if (presentIng == len(ingredients.keys())):
 					i.visible = True
 			elif (i.type == "menu"):
 				self.filterDrinks(i)
@@ -225,11 +230,12 @@ class Bartender(MenuDelegate):
 		self.running = False
 
 	def displayMenuItem(self, menuItem):
-		print menuItem.name
+		print (menuItem.name)
 		self.led.clear_display()
 		self.led.draw_text2(0,20,menuItem.name,2)
 		self.led.display()
 
+	"""
 	def cycleLights(self):
 		t = threading.currentThread()
 		head  = 0               # Index of first 'on' pixel
@@ -262,8 +268,8 @@ class Bartender(MenuDelegate):
 		# turn lights off
 		for i in range(0, self.numpixels):
 			self.strip.setPixelColor(i, 0)
-		self.strip.show() 
-
+		self.strip.show()
+	"""
 	def pour(self, pin, waitTime):
 		GPIO.output(pin, GPIO.LOW)
 		time.sleep(waitTime)
@@ -283,8 +289,8 @@ class Bartender(MenuDelegate):
 		self.running = True
 
 		# launch a thread to control lighting
-		lightsThread = threading.Thread(target=self.cycleLights)
-		lightsThread.start()
+		#lightsThread = threading.Thread(target=self.cycleLights)
+		#lightsThread.start()
 
 		# Parse the drink ingredients and spawn threads for pumps
 		maxTime = 0
@@ -313,11 +319,11 @@ class Bartender(MenuDelegate):
 		self.menuContext.showMenu()
 
 		# stop the light thread
-		lightsThread.do_run = False
-		lightsThread.join()
+		#lightsThread.do_run = False
+		#lightsThread.join()
 
 		# show the ending sequence lights
-		self.lightsEndingSequence()
+		#self.lightsEndingSequence()
 
 		# sleep for a couple seconds to make sure the interrupts don't get triggered
 		time.sleep(2);
@@ -350,13 +356,13 @@ class Bartender(MenuDelegate):
 	def run(self):
 		self.startInterrupts()
 		# main loop
-		try:  
+		try:
 			while True:
 				time.sleep(0.1)
-		  
-		except KeyboardInterrupt:  
-			GPIO.cleanup()       # clean up GPIO on CTRL+C exit  
-		GPIO.cleanup()           # clean up GPIO on normal exit 
+
+		except KeyboardInterrupt:
+			GPIO.cleanup()       # clean up GPIO on CTRL+C exit
+		GPIO.cleanup()           # clean up GPIO on normal exit
 
 		traceback.print_exc()
 
@@ -364,7 +370,3 @@ class Bartender(MenuDelegate):
 bartender = Bartender()
 bartender.buildMenu(drink_list, drink_options)
 bartender.run()
-
-
-
-
