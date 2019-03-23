@@ -1,10 +1,3 @@
-Bartender.py
-Earlier this week
-Mon 10:39 PM
-J
-You uploaded an item
-Text
-Bartender.py
 # Initialize adaFruit
 #execfile('confAda.py')
 execfile("/home/pi/Desktop/AutomatedBobaGadget/image.py")
