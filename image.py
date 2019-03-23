@@ -1,10 +1,3 @@
-image.py
-Earlier this week
-Mon 10:39 PM
-J
-You uploaded an item
-Text
-image.py
 # Copyright (c) 2014 Adafruit Industries
 # Author: Tony DiCola
 #
